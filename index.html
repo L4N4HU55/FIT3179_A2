@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+    <title>Bushfires in Australia in 2020</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yatra+One&effect=fire">
+    <style>
+        body {
+            font-family: "Yatra One", sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #fff;
+            background-color: #141414;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 37px;
+            margin-right: 37px; /* Ensure consistent margins */
+            margin-top: 20px; /* Adds spacing above the content wrapper */
+        }
+
+        .text-section {
+            flex-basis: 30%; /* Adjust width of the text section */
+            margin-right: 2%;
+        }
+
+        .map-section {
+            flex-basis: 68%; /* Make this larger than text-section */
+        }
+
+        #map {
+            width: 100%;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #141414;
+        }
+
+        .info-wrapper {
+            display: flex; /* Enable flexbox layout */
+            justify-content: space-between;
+            margin-left: 10px;
+        }
+
+        .graph-wrapper {
+            display: flex;
+            justify-content: space-between; /* Space between the bubble graph and heatmap */
+            margin-left: 37px; /* Aligns with content-wrapper */
+            margin-right: 37px; /* Add right margin to match the left margin */
+            margin-top: 20px; /* Adds spacing above the graph wrapper */
+        }
+
+        .bubble-container {
+            display: flex; /* Use flexbox for alignment */
+            align-items: flex-start; /* Align items to the top */
+            justify-content: flex-end; /* Align items to the right */
+        }
+
+        .graph-bubble {
+            flex-basis: 50%; /* Allocate more space to the bubble graph section */
+            display: flex; /* Enable flexbox for the graph section */
+            flex-direction: column; /* Stack the bubble graph below the text */
+        }
+
+        .text-box-small {
+            flex-basis: 40%; /* Increase width for the text box */
+        }
+
+        .graph-heat {
+            flex-basis: 20%; /* Allocate space for the heatmap */
+        }
+
+        #bubblechart {
+            width: 100%;
+            height: 100px;
+            background: rgba(0, 0, 0, 0);
+            border: 1px solid #141414;
+        }
+
+        #heatmap {
+            width: 100%;
+            height: 100px;
+            background: rgba(0, 0, 0, 0);
+            border: 1px solid #141414;
+        }
+
+        #barchart {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0);
+            border: 1px solid #141414;
+        }
+
+        .more-info-wrapper {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .text-box-container {
+            display: flex; /* New container for side by side text boxes */
+            justify-content: space-between;
+            padding: 20px; /* Align with other content */
+        }
+
+        .text-box-small {
+            flex-basis: 30%; /* Smaller box */
+        }
+
+        .text-box-medium {
+            flex-basis: 40%; /* Medium box */
+        }
+
+        .text-box-large {
+            flex-basis: 55%; /* Larger box */
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="elmo_fire.jpg" alt="Header Image" style="width: 100%; height: auto;">
+    </header>
+    <div class="content">
+        <h1 class="font-effect-fire">Bushfires in Australia in 2020</h1>
+
+        <div class="content-wrapper">
+            <div class="text-section">
+                <p>The 2019-20 Australian bushfires were catastrophic in scale and impact - both for people and for nature. Up to 19 million hectares were burnt, with 12.6 million hectares primarily forests and woodlands.</p>
+                
+                <p>Here we can see that majority of the area that was impacted were forests and the state most affected was NSW</p>
+                <div class="barchart-section">
+                    <div id="barchart"></div>
+                </div>
+            </div>
+
+            <div class="map-section">
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <div class="info-wrapper">
+            <div class="graph-wrapper">
+                <div class="graph-heat">
+                    <div id="heatmap"></div>
+                    <p>From this heatmap, we can tell that devastatingly a majority of the area burnt in NSW were part of the nature conservation.</p>
+                </div>
+                <div class="graph-bubble">
+                    <div class="bubble-container">
+                        <div class="text-box-small">
+                            <p>T31 is the heat emitted from the fire.</p>
+                        </div>
+                        <div id="bubblechart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="vega_lite_vis.js"></script>
+    <script>
+        var vg_1 = "Bushfire_Map.vg.json";
+        vegaEmbed("#map", vg_1).then(function(result) {
+            var view = result.view;
+        }).catch(console.error);
+
+        var vg_2 = "BubbleChart.vg.json";
+        vegaEmbed("#bubblechart", vg_2).then(function(result) {
+            var view = result.view;
+        }).catch(console.error);
+
+        var vg_3 = "Barchart.vg.json";
+        vegaEmbed("#barchart", vg_3).then(function(result) {
+            var view = result.view;
+        }).catch(console.error);
+
+        var vg_4 = "HeatMap.vg.json";
+        vegaEmbed("#heatmap", vg_4).then(function(result) {
+            var view = result.view;
+        }).catch(console.error);
+    </script>
+</body>
+</html>
