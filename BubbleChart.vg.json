@@ -1,0 +1,103 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Heat vs Brightness of the Fire",
+    "fontSize": 20,
+    "color": "white",
+    "font": "Yatra One"
+  },
+  "background": "#141414",
+  "width": 275,
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/L4N4HU55/FIT3179_A2/refs/heads/main/Bushfires_on_1st_Jan_2020.csv",
+    "format": { "type": "csv" }
+  },
+  "params": [
+    {
+      "name": "Daytime_selection",
+      "bind": {
+        "input": "select",
+        "options": [null, "D", "N"],
+        "labels": ["Show All", "Day", "Night"],
+        "name": "Daytime Selection"
+      }
+    },
+    {
+      "name": "FRP_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 2500,
+        "step": 100,
+        "name": "Minimum FRP"
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "Daytime_selection == null || datum.daynight == Daytime_selection"
+    },
+    {
+      "filter": "datum.frp > FRP_Above"
+    }
+  ],
+  "mark": "circle",
+  "encoding": {
+    "x": {
+      "field": "brightness",
+      "type": "quantitative",
+      "title": "Brightness",
+      "scale": {
+        "domain": [340, 500]
+      }
+    },
+    "y": {
+      "field": "bright_t31",
+      "type": "quantitative",
+      "title": "Bright T31",
+      "scale": {
+        "domain": [270, 350]
+      }
+    },
+    "size": {
+      "field": "confidence",
+      "type": "quantitative",
+      "title": "Confidence",
+      "scale": { "range": [100, 500] },
+      "legend": { "symbolFillColor": "white" }
+    },
+    "color": {
+      "field": "frp",
+      "type": "quantitative",
+      "title": "Fire Radiative Power",
+      "scale": { "range": ["#de8740", "#751228"] }
+    },
+    "tooltip": [
+      { "field": "brightness", "type": "quantitative" },
+      { "field": "confidence", "type": "quantitative" },
+      { "field": "bright_t31", "type": "quantitative" },
+      { "field": "frp", "type": "quantitative" },
+      { "field": "daynight", "type": "nominal" }
+    ]
+  },
+  "config": {
+    "text": {
+      "color": "white",
+      "font": "Yatra One"
+    },
+    "axis": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    },
+    "legend": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    }
+  }
+}

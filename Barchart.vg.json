@@ -1,0 +1,102 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Area Types within the Fire by State",
+    "fontSize": 20,
+    "color": "white",
+    "font": "Yatra One"
+  },
+  "background": "#141414",
+  "width": 175,
+  "height": 200,
+  "config": {
+    "text": { "color": "white", "font": "Yatra One" },
+    "axis": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    },
+    "legend": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    }
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/L4N4HU55/FIT3179_A2/refs/heads/main/Barchart.csv",
+    "format": { "type": "csv" }
+  },
+  "transform": [
+    {
+      "calculate": "datum['Fire area'] - datum['Forest area in fire area']",
+      "as": "Non-Forest Area"
+    },
+    {
+      "fold": ["Forest area in fire area", "Non-Forest Area"],
+      "as": ["Area Type", "Value"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "Jurisdiction",
+          "type": "nominal",
+          "axis": { "labelAngle": 45, "labelFont": "Yatra One" },
+          "title": "State"
+        },
+        "y": {
+          "field": "Value",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "Area Type",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Forest area in fire area", "Non-Forest Area"],
+            "range": ["#af1a3c", "#de8740"]
+          }
+        },
+        "tooltip": [
+          { "field": "Jurisdiction", "type": "nominal" },
+          { "field": "Area Type", "type": "nominal" },
+          { "field": "Value", "type": "quantitative" }
+        ]
+      }
+    },
+    {
+      "mark": "rule",
+      "encoding": {
+        "y": {
+          "aggregate": "mean",
+          "field": "Value",
+          "type": "quantitative"
+        },
+        "color": { "value": "darkred" },
+        "size": { "value": 3 }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 14,
+        "color": "darkred",
+        "fontWeight": "normal"
+      },
+      "encoding": {
+        "text": {
+          "value": "Median"
+        },
+        "x": { "value": 210 },
+        "y": { "value":180 }
+      }
+    }
+  ]
+}

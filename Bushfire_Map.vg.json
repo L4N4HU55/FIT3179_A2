@@ -1,0 +1,104 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Bushfire Impact by State",
+    "fontSize": 20,
+    "color": "white",
+    "font": "Yatra One"
+  },
+  "width": 600,
+  "height": 450,
+  "background": "#141414",
+  "projection": { "type": "mercator" },
+  "data": {
+    "url": "https://raw.githubusercontent.com/L4N4HU55/FIT3179_A2/refs/heads/main/australia_ne_50m_admin_1_states_provinces.topojson",
+    "format": {
+      "type": "topojson",
+      "feature": "australia_ne_50m_admin_1_states_provinces"
+    }
+  },
+  "transform": [
+    {
+      "lookup": "properties.name",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/L4N4HU55/FIT3179_A2/refs/heads/main/Map_A2.csv"
+        },
+        "key": "Jurisdiction",
+        "fields": ["Fire"]
+      }
+    },
+    {
+      "calculate": "toNumber(datum.Fire) + 0.1",
+      "as": "Fire Area"
+    },
+    {
+      "calculate": "datum.Fire < 100 ? '0 – 100' : datum.Fire < 500 ? '101 – 500' : datum.Fire < 1500 ? '501 – 1,500' : datum.Fire < 3000 ? '1,501 – 3,000' : '3,001+'",
+      "as": "Fire Range"
+    }
+  ],
+  "layer": [
+    {
+      "mark": { "type": "geoshape", "strokeWidth": 0 },
+      "encoding": {
+        "color": {
+          "field": "Fire Range",
+          "type": "ordinal",
+          "scale": {
+            "domain": [
+              "0 – 100",
+              "101 – 500",
+              "501 – 1,500",
+              "1,501 – 3,000",
+              "3,001+"
+            ],
+            "range": ["#de8740", "#d86f39", "#d05832", "#c8412b", "#af1a3c"]
+          },
+          "legend": {
+            "title": "Fire Area",
+            "symbolType": "square",
+            "orient": "bottom-left" 
+          }
+        },
+        "tooltip": [
+          { "field": "properties.name", "type": "nominal", "title": "State" },
+          {
+            "field": "Fire Area",
+            "type": "quantitative",
+            "title": "Fire Area ('000 hectares)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 9,
+        "color": "white"
+      },
+      "encoding": {
+        "text": {
+          "value": "New South Wales has the highest amount of Fire"
+        },
+        "x": { "value": 210 },
+        "y": { "value": 350 },
+        "opacity": { "value": 1 }
+      }
+    }
+  ],
+  "config": {
+    "text": { "color": "white", "font": "Yatra One" },
+    "axis": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    },
+    "legend": {
+      "labelColor": "white",
+      "titleColor": "white",
+      "labelFont": "Yatra One",
+      "titleFont": "Yatra One"
+    }
+  }
+}
