@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Burnt Forest are by Type and State",
+    "text": "Burnt Forest Area by Type and State",
     "fontSize": 20,
     "color": "white",
     "font": "Yatra One"
