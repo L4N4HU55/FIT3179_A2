@@ -73,7 +73,7 @@
     {
       "mark": {
         "type": "text",
-        "fontSize": 9,
+        "fontSize": 12,
         "color": "white"
       },
       "encoding": {
